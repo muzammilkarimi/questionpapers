@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* Track */
+/* ::-webkit-scrollbar-track {
+  background: #e2e1df;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ff914d;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #a15d32;
+}
+*/ ::-moz-selection {
+  /* Code for Firefox */
+  /* color: red; */
+  background: #ff914d;
+}
+
+::selection {
+  /* color: red; */
+  background: #e47f41;
+}
+
 .hamburger {
   cursor: pointer;
   width: 24px;

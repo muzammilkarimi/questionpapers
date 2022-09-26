@@ -5,10 +5,11 @@ const headerleft = () => {
   return (
     <>
       <div className='flex bg-back-grey rounded-b-lg h-20 items-center justify-between w-screen '>
+      <Script src='/navscript.js' strategy='afterInteractive' />
         <Link href="/">
           <div className='flex ml-6 items-center cursor-pointer '>
             <img className='w-10 h-10' src="/logo.svg" alt="" />
-            <div className='hidden md:flex ml-3 font-bold '>
+            <div className=' ml-3 font-bold '>
               <h3>Questionpaperz.com</h3>
             </div>
           </div>

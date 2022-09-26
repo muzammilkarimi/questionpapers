@@ -19,7 +19,7 @@ const banner = () => {
                 <div className='flex justify-center items-center md:ml-10 ml-0'>
                     <div className='space-y-6 flex flex-col justify-center items-center p-8 md:p-0 md:items-start md:justify-start'>
                         <h1 className='text-3xl md:text-5xl font-bold'>We Provide </h1>
-                        <p className='text-lg text-center md:text-xl'>
+                        <p className='text-lg text-center md:text-left md:text-xl'>
                             Subjects Wise Notes, State Boards, Universities and Entrance Exams Previous Years
                             Question Papers with Answers.
                         </p>
