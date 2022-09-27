@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Script from "next/script";
-import { signIn } from 'next-auth/react'
+import Login from "../components/login"
 const headerright = () => {
+
   return (
     <>
       <div>
@@ -19,12 +20,8 @@ const headerright = () => {
                 <h3>Write</h3>
               </div>
             </Link>
-            
-              <div onClick={()=>signIn()}  className="bg-qp-orange flex h-10 w-28 items-center justify-evenly rounded-xl drop-shadow-neo cursor-pointer ">
-                <img src="/login.svg" alt="" />
-                <h3>Signin</h3>
-              </div>
-            
+            <Login/>
+              
           </div>
         </div>
         {/* mobile menu */}
