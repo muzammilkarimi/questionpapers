@@ -1,74 +1,79 @@
-import Head from 'next/head'
-import Headerleft from '../components/headerleft'
-import Headerright from '../components/headerright'
-import Banner from '../components/banner'
-import Questionpost from '../components/questionspostcard'
-import Image from 'next/image'
-import Script from 'next/script'
-import Link from 'next/link'
+import Head from "next/head";
+import Headerleft from "../components/headerleft";
+import Headerright from "../components/headerright";
+import Sidebar from "../components/sidebar";
+import Banner from "../components/banner";
+import Grid from "../components/grid";
+import Link from "next/link";
+import { GrHistory } from "react-icons/gr";
+import { prisma } from "../lib/prisma";
 
+export async function getServerSideProps() {
+  // Get all homes
+  const questions = await prisma.question.findMany({
+    include: {
+      board: {
+        select: { logo_url: true, name: true },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      }, // Return all fields
+    },
+  });
+  // Pass the data to the Home page
+  return {
+    props: {
+      questions: JSON.parse(JSON.stringify(questions)),
+    },
+  };
+}
 
-
-export default function Home() {
+export default function Home({ questions = [] }) {
   return (
     <>
       <div>
         <Head>
-          <title>Home | QuestionPaperz.com</title>
-          <meta name="description" content="we provide question papers and notes" />
+          <title>QuestionPaperz.com</title>
+          <meta name="title" content="we provide question papers and notes" />
           <link rel="icon" href="/logo.svg" />
         </Head>
-        <Script src='/navscript.js' />
-        <div className='flex flex-col space-y-2'>
+        <div className="flex flex-col space-y-2">
           {/* nav bar */}
-          <div className='flex justify-between lg:space-x-2 '>
+          <div className="flex justify-between lg:space-x-2 ">
             <Headerleft />
             <Headerright />
           </div>
 
           {/* banner section */}
-          <div className='flex justify-between lg:space-x-2'>
+          <div className="flex justify-between lg:space-x-2">
             <Banner />
-            <Headerright />
+            <Sidebar/>
           </div>
 
-
           {/* recent question papers section */}
-          <div className='flex justify-between lg:space-x-2 '>
-            <div className='flex flex-col bg-back-grey rounded-b-lg rounded-t-lg w-screen'>
-              <div className='flex space-x-3 m-10 items-center'>
-                <Image
-                  src={'/recent.svg'}
-                  height={20}
-                  width={20}
-                />
+          <div className="flex justify-between lg:space-x-2 ">
+            <div className="flex flex-col bg-back-grey rounded-b-lg rounded-t-lg w-screen">
+              <div className="flex space-x-3 m-10 items-center">
+                <GrHistory className="w-5 h-5 shrink-0 text-black" />
                 <div>Recent Question Papers</div>
               </div>
-              <div className='flex flex-wrap justify-center items-center '>
-                <Questionpost />
-                <Questionpost />
-                <Questionpost />
-                <Questionpost />
-                <Questionpost />
-                <Questionpost />
+              <div className="">
+                <Grid questions={questions} />
               </div>
-              <Link href='#'>
-                <div className='flex justify-center items-center pb-16 pt-5'>
-                  <div className=' w-32 h-12 border-2 flex justify-center items-center border-black rounded-full cursor-pointer'>
+              <Link href="#">
+                <div className="flex justify-center items-center pb-16 pt-5">
+                  <div className=" w-32 h-12 border-2 flex justify-center items-center border-black rounded-full cursor-pointer">
                     <p>load more</p>
                   </div>
                 </div>
               </Link>
             </div>
-            <Headerright />
+            <Sidebar />
           </div>
-
-
-
-
         </div>
-
       </div>
     </>
-  )
+  );
 }
