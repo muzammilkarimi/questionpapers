@@ -27,11 +27,11 @@ const Listedquestion = (question=null) => {
         <div className='flex justify-between lg:space-x-2'>
           <div className='flex flex-col bg-back-grey rounded-b-lg rounded-t-lg items-center justify-between w-screen '>
             <div className=' mt-10 mb-3 h-28 w-28 '>
-              <img className='' src={question?.board?.logo_url} alt="board logo" />
+              {question?.board?.logo_url?<img className='' src={question?.board?.logo_url} alt="board logo" />:<div className="h-28 w-28 rounded-full bg-white"></div>}
             </div>
             <div className='text-center md:space-y-3 '>
               <h1 className='text-3xl font-bold'>{question?.board?.name}</h1>
-              <h3 className='font-bold'>{question?.class} | {question?.year}</h3>
+              <h3 className='font-bold'>{question?.class_name} | {question?.year}</h3>
               <h2 className='font-bold'>{question?.subject}</h2>
             </div>
             <div className='mt-10 '>

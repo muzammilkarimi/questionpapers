@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Script from "next/script";
+import Image from "next/image";
 import Login from "../components/login";
 const headerleft = () => {
   return (
@@ -7,7 +7,7 @@ const headerleft = () => {
       <div className="flex bg-back-grey rounded-b-lg h-20 items-center justify-between w-screen ">
         <Link href="/">
           <div className="flex ml-6 items-center cursor-pointer ">
-            <img className="w-10 h-10" src="/logo.svg" alt="" />
+            <Image width={40} height={40} src="/logo.svg" alt="questionpapers logo" />
             <div className=" ml-3 font-bold ">
               <h3>Questionpaperz.com</h3>
             </div>

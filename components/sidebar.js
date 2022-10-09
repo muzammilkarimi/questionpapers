@@ -10,7 +10,7 @@ const menuItems = [
   {
     label: "Upload",
     icon: FiUpload,
-    href: "/",
+    href: "/upload",
   },
   {
     label: "Write",

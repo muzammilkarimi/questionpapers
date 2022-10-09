@@ -11,6 +11,12 @@ import { prisma } from "../lib/prisma";
 export async function getServerSideProps() {
   // Get all homes
   const questions = await prisma.question.findMany({
+    orderBy: [
+      {
+        createdAt: 'desc',
+      },
+      
+    ],
     include: {
       board: {
         select: { logo_url: true, name: true },
