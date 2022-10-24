@@ -30,7 +30,7 @@ const questionspostcard = ({
               className="absolute top-4 right-4"
             >
               <BsBookmarkFill
-                className={`w-6 h-6 drop-shadow-xl transition ${saved ? 'text-qp-orange' : 'text-white'
+                className={`hover:text-qp-orange w-6 h-6 drop-shadow-xl transition ${saved ? 'text-qp-orange' : 'text-white'
                   }`}
               />
             </button>

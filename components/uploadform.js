@@ -10,7 +10,8 @@ import Pdfupload from "./pdfupload";
 import Input from "./input";
 const ListingSchema = Yup.object().shape({
   // pdf_url: Yup.string().required(),
-  year: Yup.number().positive().required(),
+  // year: Yup.number().positive().min(4,"Invalid Year").max(4,"Invalid Year").required(),
+  year: Yup.date().required(),
   boardId: Yup.string().required("select Board"),
   typeId: Yup.string().required("Select Type"),
   class_name: Yup.string().required("Enter class"),

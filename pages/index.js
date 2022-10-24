@@ -68,13 +68,7 @@ export default function Home({ questions = [] }) {
               <div className="">
                 <Grid questions={questions} />
               </div>
-              <Link href="#">
-                <div className="flex justify-center items-center pb-16 pt-5">
-                  <div className=" w-32 h-12 border-2 flex justify-center items-center border-black rounded-full cursor-pointer">
-                    <p>load more</p>
-                  </div>
-                </div>
-              </Link>
+              
             </div>
             <Sidebar />
           </div>

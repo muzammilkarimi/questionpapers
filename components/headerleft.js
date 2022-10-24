@@ -13,32 +13,32 @@ const headerleft = () => {
             </div>
           </div>
         </Link>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center text-black duration-200">
           <ul className="hidden lg:flex space-x-6 items-center font-bold">
             <Link href="/Boards">
-              <li className="cursor-pointer">
+              <li className="cursor-pointer hover:text-gray-600">
                 <a>Boards</a>
               </li>
             </Link>
             <Link href="/Universities">
-              <li className="cursor-pointer">
+              <li className="cursor-pointer hover:text-gray-600">
                 <a>Universities</a>
               </li>
             </Link>
             <Link href="/Ent. Exam">
-              <li className="cursor-pointer">
+              <li className="cursor-pointer hover:text-gray-600">
                 <a>Ent. Exams</a>
               </li>
             </Link>
             <Link href="/Notes">
-              <li className="cursor-pointer">
+              <li className="cursor-pointer hover:text-gray-600">
                 <a>Notes</a>
               </li>
             </Link>
           </ul>
           <div className="flex items-center justify-center ml-5 mr-5">
             <Link href="/Search">
-              <div className="md:bg-qp-orange w-10 h-10 flex justify-center items-center rounded-full drop-shadow-neo cursor-pointer ">
+              <div className="md:bg-qp-orange w-10 h-10 flex justify-center items-center rounded-full drop-shadow-neo cursor-pointer hover:bg-[#ec9e6e] ">
                 <img className="w-6 h-6" src="/searchicon.svg" alt="" />
               </div>
             </Link>
