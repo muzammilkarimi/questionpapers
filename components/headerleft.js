@@ -25,7 +25,7 @@ const headerleft = () => {
                 <a>Universities</a>
               </li>
             </Link>
-            <Link href="/Ent. Exam">
+            <Link href="/EntExam">
               <li className="cursor-pointer hover:text-gray-600">
                 <a>Ent. Exams</a>
               </li>

@@ -119,7 +119,7 @@ const AuthModal = ({ show = false, onClose = () => null }) => {
                                     {!showSignIn ? (
                                         <Dialog.Description className="mt-2 text-gray-500 text-base text-center">
                                             Please Login your account to Upload Questions and bookmark
-                                            your favorite ones.
+                                            your favourite ones.
                                         </Dialog.Description>
                                     ) : null}
 
