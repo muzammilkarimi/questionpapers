@@ -21,7 +21,8 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #a15d32;
 }
-*/ ::-moz-selection {
+
+::-moz-selection {
   /* Code for Firefox */
   /* color: red; */
   background: #ff914d;
