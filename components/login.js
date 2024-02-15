@@ -120,11 +120,10 @@ const Login = ({ children = null }) => {
                     >
                       <Menu.Item>
                         {href ? (
-                          <Link href={href}>
-                            <a className="flex items-center space-x-2 py-2 px-4 rounded-md hover:bg-qp-orange">
+                          <Link href={href} className="flex items-center space-x-2 py-2 px-4 rounded-md hover:bg-qp-orange">
+                            
                               <Icon className="w-5 h-5 shrink-0 text-black" />
                               <span>{label}</span>
-                            </a>
                           </Link>
                         ) : (
                           <button
