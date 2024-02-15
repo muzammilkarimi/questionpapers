@@ -15,7 +15,7 @@ const menuItems = [
   {
     label: "Write",
     icon: FiEdit,
-    href: "/",
+    href: "#",
   },
   {
     label: "Boards",
@@ -25,7 +25,7 @@ const menuItems = [
   {
     label: "Saved",
     icon: BsBookmark,
-    href: "/",
+    href: "#",
   },
   {
     label: "Your Uploads",
@@ -35,7 +35,7 @@ const menuItems = [
   {
     label: "Your Posts",
     icon: BsFilePost,
-    href: "/",
+    href: "#",
   },
 ];
 

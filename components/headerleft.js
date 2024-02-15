@@ -23,22 +23,22 @@ const Headerleft = () => {
           <ul className="hidden lg:flex space-x-6 items-center font-bold">
             <Link href="/Boards">
               <li className="cursor-pointer hover:text-gray-600">
-                <a>Boards</a>
+                Boards
               </li>
             </Link>
             <Link href="/Universities">
               <li className="cursor-pointer hover:text-gray-600">
-                <a>Universities</a>
+                Universities
               </li>
             </Link>
             <Link href="/EntExam">
               <li className="cursor-pointer hover:text-gray-600">
-                <a>Ent. Exams</a>
+                Ent. Exams
               </li>
             </Link>
             <Link href="/Notes">
               <li className="cursor-pointer hover:text-gray-600">
-                <a>Notes</a>
+                Notes
               </li>
             </Link>
           </ul>

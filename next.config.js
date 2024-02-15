@@ -2,6 +2,19 @@ module.exports = {
   reactStrictMode: true,
   productionBrowserSourceMaps: true,
   images: {
-    domains: ['lh3.googleusercontent.com','upload.wikimedia.org'],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        port: "",
+        pathname: "/**",
+      },
+    ],
   },
 };

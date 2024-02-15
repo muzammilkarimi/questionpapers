@@ -70,7 +70,7 @@ export default function Home({ questions = [] }) {
               </div>
               
             </div>
-            {/* <Sidebar /> */}
+            
           </div>
         </div>
       </div>
