@@ -1,13 +1,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import Login from "../components/login";
-const headerleft = () => {
+import { FiSearch } from "react-icons/fi";
+const Headerleft = () => {
   return (
     <>
       <div className="flex bg-back-grey rounded-b-lg h-20 items-center justify-between w-screen ">
         <Link href="/">
           <div className="flex ml-6 items-center cursor-pointer ">
-            <Image width={40} height={40} src="/logo.svg" alt="questionpapers logo" />
+            <Image
+              width={40}
+              height={40}
+              src="/logo.svg"
+              alt="questionpapers logo"
+            />
             <div className=" ml-3 font-bold ">
               <h3>Questionpaperz.com</h3>
             </div>
@@ -39,7 +45,7 @@ const headerleft = () => {
           <div className="flex items-center justify-center ml-5 mr-5">
             <Link href="/Search">
               <div className="md:bg-qp-orange w-10 h-10 flex justify-center items-center rounded-full drop-shadow-neo cursor-pointer hover:bg-[#ec9e6e] ">
-                <img className="w-6 h-6" src="/searchicon.svg" alt="" />
+                <Image width={25} height={25} src="/searchicon.svg" alt="icon" />
               </div>
             </Link>
           </div>
@@ -52,4 +58,4 @@ const headerleft = () => {
   );
 };
 
-export default headerleft;
+export default Headerleft;

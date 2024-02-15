@@ -53,7 +53,7 @@ const menuItems = [
     onClick: signOut,
   },
 ];
-const login = ({ children = null }) => {
+const Login = ({ children = null }) => {
   // console.log(session)
   const router = useRouter();
 
@@ -198,4 +198,4 @@ const login = ({ children = null }) => {
   //   );
   // }
 };
-export default login;
+export default Login;

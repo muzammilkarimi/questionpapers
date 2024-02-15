@@ -7,7 +7,7 @@ import { useSession, signOut } from "next-auth/react";
 import { FiUpload } from "react-icons/fi";
 import { FiEdit } from "react-icons/fi";
 
-const headerright = ({ children = null }) => {
+const Headerright = ({ children = null }) => {
   const router = useRouter();
 
   const { data: session, status } = useSession();
@@ -55,4 +55,4 @@ const headerright = ({ children = null }) => {
   );
 };
 
-export default headerright;
+export default Headerright;
