@@ -17,7 +17,7 @@ const questionspostcard = ({
         <div className='flex flex-col justify-center items-center space-y-2'>
           <div className=''>
             <div className='overflow-hidden flex items-center justify-center h-28 w-28 rounded-full'>
-            {logo_url?<img className='h-26 w-26' src={logo_url} alt="board logo" />:<img className='h-26 w-26' src='/QP logo.png' alt="board logo" />}
+            {logo_url ? <Image className='h-26 w-26' src={logo_url} alt="board logo" width={104} height={104} /> : <Image className='h-26 w-26' src='/QP logo.png' alt="board logo" width={104} height={104} />}
             </div>
             <button
               type="button"

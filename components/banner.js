@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-
+import Image from "next/image";
 const banner = () => {
     return (
         <>
@@ -11,7 +11,7 @@ const banner = () => {
                     <input className='w-96 text-lg bg-back-grey outline-none h-16 rounded-l-full pl-7 shadow-[inset_-1rem_-1rem_2rem_#ffffff,inset_1rem_1rem_2rem_#9e9e9e]' type="text" placeholder="Search Any Question Papers...." />
                     <button type='submit' hidden />
                     <button className='flex justify-center items-center bg-qp-orange rounded-r-full w-24 cursor-pointer' type='submit' hidden>
-                        <img className='w-8 h-8' src="/searchicon.svg" alt="" />
+                        <Image width={25} height={25} src="/searchicon.svg" alt="icon" />
                     </button>
 
                 </div>
@@ -30,7 +30,7 @@ const banner = () => {
                         </Link>
                     </div>
                     <div className='hidden md:flex rounded-full'>
-                        <img className='rounded-full' src="/cover.gif" alt="loading paper" />
+                        <Image className='rounded-full' src="/cover.gif" alt="loading paper" width={500} height={500} />
                     </div>
                 </div>
 
