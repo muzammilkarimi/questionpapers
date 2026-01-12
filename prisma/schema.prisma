@@ -61,31 +61,38 @@ model VerificationToken {
 
 model Boards {
   id       String     @id @default(cuid())
-  name     String     
+  name     String
   logo_url String?
   Question Question[]
 }
 
 model Q_type {
   id   String @id @default(cuid())
-  name String 
+  name String
 
   Question Question[]
 }
 
 model Question {
-  id         String   @id @default(cuid())
+  id String @id @default(cuid())
+
+  title      String
+  slug       String @unique
+  difficulty String // "easy" | "medium" | "hard"
+
   pdf_url    String
-  board      Boards   @relation(fields: [boardId], references: [id])
   boardId    String
   year       Int
-  type       Q_type   @relation(fields: [typeId], references: [id])
   typeId     String
   subject    String
   class_name String
   author     String
-  owner      User     @relation(fields: [ownerId], references: [id])
   ownerId    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+
+  board Boards @relation(fields: [boardId], references: [id])
+  type  Q_type @relation(fields: [typeId], references: [id])
+  owner User   @relation(fields: [ownerId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
