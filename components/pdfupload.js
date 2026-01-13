@@ -1,67 +1,84 @@
-import { useState, ChangeEvent } from 'react';
-import PropTypes from 'prop-types';
-import Image from 'next/image';
-import toast from 'react-hot-toast';
-// import classNames from 'classnames';
-// import { ArrowUpIcon } from '@heroicons/react/outline';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 
-const ImageUpload = ({
-    label = 'Select',
-    accept = '.pdf',
-    sizeLimit = 10 * 1024 * 1024, // 10MB
-    onChangePicture = () => null,
+const Pdfupload = ({
+  label = "Upload PDF",
+  accept = ".pdf",
+  sizeLimit = 10 * 1024 * 1024, // 10MB
+  onChangePicture = () => null,
 }) => {
-    const [pictureError, setPictureError] = useState(null);
-    const handleUpload = async (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        const fileName = file?.name?.split('.')?.[0] ?? 'New file';
+  const [error, setError] = useState("");
+  const [fileName, setFileName] = useState("");
 
-        reader.addEventListener(
-            'load',async function () {
-                try {
-                    if (typeof onChangePicture === 'function') {
-                        onChangePicture(reader.result);
-                    }
-                } catch (err) {
-                    toast.error('Unable to update image');
-                } 
-            },
-            false
-        );
-        if (file) {
-            if (file.size <= sizeLimit) {
-                setPictureError('');
-                reader.readAsDataURL(file);
-            } else {
-                setPictureError('File size is exceeding 10MB.');
-            }
-        }
+  const handleUpload = (e) => {
+    const file = e.target.files?.[0];
+
+    if (!file) return;
+
+    // Validate file type
+    if (!file.name.endsWith(".pdf")) {
+      setError("Only PDF files are allowed");
+      return;
+    }
+
+    // Validate size
+    if (file.size > sizeLimit) {
+      setError("File must be less than 10MB");
+      return;
+    }
+
+    setError("");
+    setFileName(file.name);
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        onChangePicture(reader.result); // base64 goes to upload()
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to process file");
+      }
     };
 
-    return (
-        <div className="flex flex-col space-y-2">
-            <label className="text-gray-600">{label}</label>
-            <div className='w-full  h-10 flex items-center justify-start rounded-md pl-3 pr-3 bg-qp-orange cursor-pointer'>
-                <input className='custom-file-input' id="file_input" type="file" accept={accept}
-                    onChange={(e) => {
-                        handleUpload(e); // 👈 this will trigger when user selects the file.
-                    }}hidden></input>
-                    <label className='w-full  h-10 flex items-center justify-start rounded-md  bg-qp-orange cursor-pointer'  htmlFor="file_input">Choose file</label>
-            </div>
+    reader.onerror = () => {
+      toast.error("File reading failed");
+    };
 
-            {pictureError ? (
-                <span className="text-red-600 text-sm">{pictureError}</span>
-            ) : null}
-        </div>
-    );
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <div className="flex flex-col space-y-2">
+      <label className="text-gray-700 font-medium">{label}</label>
+
+      <div className="w-full h-10 flex items-center rounded-md bg-qp-orange cursor-pointer px-3">
+        <input
+          id="file_input"
+          type="file"
+          accept={accept}
+          hidden
+          onChange={handleUpload}
+        />
+        <label
+          htmlFor="file_input"
+          className="w-full h-full flex items-center cursor-pointer"
+        >
+          {fileName ? fileName : "Choose PDF file"}
+        </label>
+      </div>
+
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+    </div>
+  );
 };
 
-ImageUpload.propTypes = {
-    label: PropTypes.string,
-    accept: PropTypes.string,
-    sizeLimit: PropTypes.number,
-    onChangePicture: PropTypes.func,
+Pdfupload.propTypes = {
+  label: PropTypes.string,
+  accept: PropTypes.string,
+  sizeLimit: PropTypes.number,
+  onChangePicture: PropTypes.func,
 };
 
-export default ImageUpload;
+export default Pdfupload;

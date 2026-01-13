@@ -9,32 +9,38 @@ import { GrHistory } from "react-icons/gr";
 import { prisma } from "../lib/prisma";
 
 export async function getServerSideProps() {
-  // Get all homes
   const questions = await prisma.question.findMany({
-    orderBy: [
-      {
-        createdAt: 'desc',
-      },
-      
-    ],
-    include: {
+    take: 24, // only send 24 to browser
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      subject: true,
+      year: true,
+      class_name: true,
+      pdf_url: true,
       board: {
-        select: { logo_url: true, name: true },
+        select: {
+          name: true,
+          logo_url: true,
+        },
       },
       type: {
         select: {
           name: true,
         },
-      }, // Return all fields
+      },
     },
   });
-  // Pass the data to the Home page
+
   return {
     props: {
-      questions: JSON.parse(JSON.stringify(questions)),
+      questions,
     },
   };
 }
+
 
 export default function Home({ questions = [] }) {
   return (
