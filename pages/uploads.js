@@ -1,4 +1,4 @@
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import Layout from "../components/Layout";
 import ListingSection from "../components/ListingSection";
 import { prisma } from "../lib/prisma";
@@ -38,8 +38,21 @@ export async function getServerSideProps(context) {
     };
 }
 
-const Uploads = ({ questions = [], session }) => {
-    if (!session) {
+const Uploads = ({ questions = [], session: serverSession }) => {
+    const { data: session, status } = useSession();
+    const currentSession = session || serverSession;
+
+    if (status === "loading") {
+      return (
+        <Layout>
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="h-12 w-12 border-4 border-gray-200 border-t-qp-orange rounded-full animate-spin" />
+          </div>
+        </Layout>
+      );
+    }
+
+    if (!currentSession) {
       return (
         <Layout title="Login Required | QuestionPaperz.com">
           <div className="min-h-[60vh] flex flex-col items-center justify-center text-center space-y-8 animate-fade-in">
