@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import Uploadform from "../components/uploadform";
 import Layout from "../components/Layout";
 import axios from 'axios';
+import { FiUpload } from "react-icons/fi";
 import { prisma } from "../lib/prisma";
 
 export async function getServerSideProps(context) {

@@ -48,7 +48,7 @@ const Uploads = ({ questions = [], session }) => {
             </div>
             <div className="space-y-3 max-w-md">
               <h1 className="text-3xl font-extrabold text-gray-900">Your Contributions</h1>
-              <p className="text-gray-500 font-medium">Please sign in to view and manage the question papers and notes you've shared with the community.</p>
+              <p className="text-gray-500 font-medium">Please sign in to view and manage the question papers and notes you&apos;ve shared with the community.</p>
             </div>
             <button 
               onClick={() => {

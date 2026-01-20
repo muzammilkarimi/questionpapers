@@ -78,7 +78,7 @@ const Search = ({ initialResults = [], query: initialQuery = "" }) => {
                   <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
                     <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center text-3xl">🔍</div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">No results found for "{q}"</h3>
+                      <h3 className="text-xl font-bold text-gray-900">No results found for &quot;{q}&quot;</h3>
                       <p className="text-gray-500 max-w-md mx-auto mt-2">Try checking for typos or searching with different keywords.</p>
                     </div>
                   </div>
