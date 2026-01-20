@@ -13,23 +13,23 @@ export const config = {
 export default async function handler(req, res) {
   // Upload image to Supabase
   if (req.method === 'POST') {
-    let { image } = req.body;
+    let { image: file } = req.body;
 
-    if (!image) {
-      return res.status(500).json({ message: 'No image provided' });
+    if (!file) {
+      return res.status(500).json({ message: 'No file provided' });
     }
 
     try {
-      const contentType = image.match(/data:(.*);base64/)?.[1];
-      const base64FileData = image.split('base64,')?.[1];
+      const contentType = file.match(/data:(.*);base64/)?.[1];
+      const base64FileData = file.split('base64,')?.[1];
 
       if (!contentType || !base64FileData) {
-        return res.status(500).json({ message: 'Image data not valid' });
+        return res.status(500).json({ message: 'File data not valid' });
       }
 
-      // Upload image
+      // Upload file
       const fileName = nanoid();
-      const ext = contentType.split('/')[1];
+      const ext = contentType.split('/')[1] || 'pdf';
       const path = `${fileName}.${ext}`;
 
       const { data, error: uploadError } = await supabase.storage
@@ -44,14 +44,14 @@ export default async function handler(req, res) {
         throw new Error('Unable to upload file to storage');
       }
 
-      // Construct public URL
-      const url = `${process.env.SUPABASE_URL.replace(
-        '.co',
-        '.in'
-      )}/storage/v1/object/public/${data.Key}`;
+      // Construct public URL using Supabase utility
+      const { publicURL } = supabase.storage
+        .from(process.env.SUPABASE_BUCKET)
+        .getPublicUrl(path);
 
-      return res.status(200).json({ url });
+      return res.status(200).json({ url: publicURL });
     } catch (e) {
+      console.error(e);
       res.status(500).json({ message: 'Something went wrong' });
     }
   }

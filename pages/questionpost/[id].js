@@ -1,98 +1,170 @@
-export const dynamic = "force-dynamic";
-import React from "react";
+import React, { useState } from "react";
 import { prisma } from "../../lib/prisma";
-import Headerleft from "../../components/headerleft";
-import Headerright from "../../components/headerright";
-import Sidebar from "../../components/sidebar";
-import Head from "next/head";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { getSession } from "next-auth/react";
+import Layout from "../../components/Layout";
 import Image from "next/image";
+import { FiDownload, FiBookmark, FiShare2, FiExternalLink } from "react-icons/fi";
+import { BsBookmarkFill } from "react-icons/bs";
 
 const Listedquestion = ({ question }) => {
+  const [isSaved, setIsSaved] = useState(question?.saved || false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const pageTitle = `${question?.subject}${question?.year ? ` ${question.year}` : ''} - ${question?.board?.name || 'Study Notes'}`;
+  const pageDesc = `Download ${question?.subject} ${question?.year || ''} document from ${question?.board?.name || 'our collection'}. Class/Dept: ${question?.class_name}. Free PDF download available on QuestionPaperz.com.`;
+
   return (
-    <>
-      <Head>
-        <title>QuestionPaperz.com</title>
-        <meta name="description" content="we provide question papers and notes" />
-        <link rel="icon" href="/logo.svg" />
-      </Head>
-
-      <div className="flex flex-col space-y-2">
-        {/* nav bar */}
-        <div className="flex justify-between lg:space-x-2 ">
-          <Headerleft />
-          <Headerright />
-        </div>
-
-        <div className="flex justify-between lg:space-x-2">
-          <div className="flex flex-col bg-back-grey rounded-b-lg rounded-t-lg items-center justify-between w-screen ">
-            <div className="mt-10 mb-3 h-28 w-28 ">
-              {question?.board?.logo_url ? (
-                <Image
-                  className="h-26 w-26"
-                  src={question.board.logo_url}
-                  alt="board logo"
-                  width={104}
-                  height={104}
-                />
-              ) : (
-                <Image
-                  className="h-26 w-26"
-                  src="/QP logo.png"
-                  alt="board logo"
-                  width={104}
-                  height={104}
-                />
-              )}
-            </div>
-
-            <div className="text-center md:space-y-3 ">
-              <h1 className="text-3xl font-bold">{question?.board?.name}</h1>
-              <h3 className="font-bold">
-                {question?.class_name} | {question?.year}
-              </h3>
-              <h2 className="font-bold">{question?.subject}</h2>
-            </div>
-
-            <div className="mt-10 ">
-              <iframe
-                src={question?.pdf_url}
-                className="w-[30rem] h-[40rem] md:w-[50rem] md:h-[50rem] rounded-xl"
+    <Layout title={`${pageTitle} | QuestionPaperz.com`} description={pageDesc}>
+      <div className="animate-fade-in space-y-10">
+        {/* Header / Info Section */}
+        <div className="bg-white rounded-[2.5rem] p-8 sm:p-12 shadow-sm border border-gray-100 flex flex-col items-center text-center space-y-8">
+          <div className="relative w-32 h-32 rounded-full bg-gray-50 flex items-center justify-center p-4 shadow-inner border-4 border-white">
+            {question?.board?.logo_url ? (
+              <Image
+                src={question.board.logo_url}
+                alt={question.board.name}
+                width={100}
+                height={100}
+                objectFit="contain"
               />
-            </div>
-
-            <div className="mt-6 p-14 bg-[#D9D9D9] rounded-lg items-center justify-between h-24 w-[23rem] md:w-[50rem] flex">
-              <a href={question?.pdf_url} target="_blank" rel="noreferrer">
-                <div className="bg-qp-orange flex h-10 w-36 items-center justify-evenly rounded-xl drop-shadow-neo cursor-pointer">
-                  <Image
-                    src="/download.svg"
-                    alt="Download icon"
-                    width={24}
-                    height={24}
-                  />
-                  <h3>Download</h3>
-                </div>
-              </a>
-
-              <div>
-                <Image src="/save.svg" alt="save icon" width={24} height={24} />
-              </div>
-            </div>
+            ) : (
+              <div className="text-4xl font-black text-qp-orange">{question?.board?.name?.[0]}</div>
+            )}
           </div>
 
-          <Sidebar />
+          <div className="space-y-4">
+            <h1 className="text-3xl sm:text-5xl font-extrabold text-gray-900 tracking-tight">
+              {question?.subject}
+            </h1>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span className="px-4 py-1.5 rounded-full bg-orange-50 text-qp-orange font-bold text-sm border border-orange-100">
+                Type: {question?.type?.name || 'Question Paper'}
+              </span>
+              {question?.year && (
+                <span className="px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 font-bold text-sm border border-blue-100">
+                  Year: {question?.year}
+                </span>
+              )}
+              <span className="px-4 py-1.5 rounded-full bg-purple-50 text-purple-600 font-bold text-sm border border-purple-100">
+                Class/Dept: {question?.class_name}
+              </span>
+            </div>
+            {question?.board?.name && <p className="text-xl font-medium text-gray-500">{question?.board?.name}</p>}
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-4 pt-4">
+            <a href={question?.pdf_url} target="_blank" rel="noreferrer" className="btn-primary px-8 h-14">
+              <FiDownload className="text-xl" /> Download PDF
+            </a>
+            <button 
+              className={`btn-secondary px-8 h-14 ${isSaved ? '!text-qp-orange !bg-orange-50 !border-orange-200' : ''}`}
+              disabled={isSaving}
+              onClick={async () => {
+                setIsSaving(true);
+                // Optimistic update
+                const previousState = isSaved;
+                setIsSaved(!previousState);
+
+                try {
+                  if (previousState) {
+                    await axios.delete("/api/bookmark", { data: { questionId: question.id } });
+                    toast.success("Removed from bookmarks");
+                  } else {
+                    await axios.post("/api/bookmark", { questionId: question.id });
+                    toast.success("Saved to bookmarks");
+                  }
+                } catch (e) {
+                   // Rollback on error
+                   setIsSaved(previousState);
+                   toast.error("Failed to update bookmark. Please sign in.");
+                } finally {
+                  setIsSaving(false);
+                }
+              }}
+            >
+              {isSaved ? <BsBookmarkFill className="text-xl" /> : <FiBookmark className="text-xl" />}
+              {isSaved ? 'Saved' : 'Save for Later'}
+            </button>
+            <button 
+              className="btn-secondary px-6 h-14 flex items-center justify-center hover:text-qp-orange transition-colors"
+              title="Share document"
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({
+                    title: pageTitle,
+                    text: `Check out this document: ${question?.subject}`,
+                    url: window.location.href,
+                  })
+                  .then(() => toast.success('Shared successfully'))
+                  .catch((error) => console.log('Error sharing', error));
+                } else {
+                  // Fallback: Copy to clipboard
+                  navigator.clipboard.writeText(window.location.href);
+                  toast.success('Link copied to clipboard!');
+                }
+              }}
+            >
+              <FiShare2 className="text-xl" />
+            </button>
+          </div>
+        </div>
+
+        {/* View Section */}
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              <FiExternalLink className="text-qp-orange" /> Document Preview
+            </h2>
+            <p className="text-sm text-gray-500 hidden sm:block">Scroll through the document below</p>
+          </div>
+          
+          <div className="bg-gray-900 rounded-[2.5rem] p-4 sm:p-8 shadow-2xl overflow-hidden min-h-[600px] flex justify-center">
+            {question?.pdf_url ? (
+              <iframe
+                src={`${question.pdf_url}#toolbar=0`}
+                className="w-full h-[600px] sm:h-[800px] rounded-2xl bg-white border-none shadow-inner"
+                title="Document viewer"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center text-white space-y-4">
+                <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin" />
+                <p>Loading document preview...</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Contribution Credits */}
+        <div className="bg-white/50 backdrop-blur-md rounded-3xl p-8 border border-white text-center">
+          <p className="text-gray-500">
+            Contributed by <span className="font-bold text-gray-900">{question?.author || 'Anonymous'}</span>
+          </p>
+          <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">Thank you for supporting the community</p>
         </div>
       </div>
-    </>
+    </Layout>
   );
 };
 
-export async function getServerSideProps({ params }) {
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const session = await getSession(context);
+
   const question = await prisma.question.findUnique({
     where: { id: params.id },
     include: {
       board: {
         select: { logo_url: true, name: true },
       },
+      type: {
+        select: { name: true },
+      },
+      bookmarkedBy: session?.user ? {
+        where: { user: { email: session.user.email } },
+        select: { id: true }
+      } : false
     },
   });
 
@@ -102,9 +174,15 @@ export async function getServerSideProps({ params }) {
     };
   }
 
+  const formattedQuestion = {
+    ...question,
+    saved: question.bookmarkedBy?.length > 0,
+    bookmarkedBy: undefined
+  };
+
   return {
     props: {
-      question: JSON.parse(JSON.stringify(question)),
+      question: JSON.parse(JSON.stringify(formattedQuestion)),
     },
   };
 }

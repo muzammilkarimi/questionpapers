@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'qp-orange' : '#FF914D',
+        'qp-orange-dark': '#E67E3C',
         'back-grey' : '#E2E1DF',
       },
       dropShadow: {

@@ -1,200 +1,124 @@
-import React from "react";
-import { Fragment, useState } from "react";
+import React, { Fragment, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import AuthModal from "./authmodal";
 import { useSession, signOut } from "next-auth/react";
 import { Menu, Transition } from "@headlessui/react";
-import { FiUpload, FiEdit } from "react-icons/fi";
-import { BsGlobe, BsBookmark, BsFilePost } from "react-icons/bs";
-import {
-  AiOutlineUser,
-  AiOutlineUserAdd,
-  AiOutlineFileDone,
-} from "react-icons/ai";
-import { MdOutlineLogout } from "react-icons/md";
+import { FiUpload, FiEdit, FiLogOut, FiUser, FiGlobe, FiBookmark, FiFileText } from "react-icons/fi";
+import { AiOutlineUserAdd, AiOutlineFileDone } from "react-icons/ai";
 import { ChevronDownIcon } from "@heroicons/react/solid";
-// import { signIn, useSession, signOut } from "next-auth/react";
-const menuItems = [
-  {
-    label: "Upload",
-    icon: FiUpload,
-    href: "/upload",
-  },
-  {
-    label: "Write",
-    icon: FiEdit,
-    href: "#",
-  },
-  {
-    label: "Boards",
-    icon: BsGlobe,
-    href: "/Boards",
-  },
-  {
-    label: "Saved",
-    icon: BsBookmark,
-    href: "#",
-  },
-  {
-    label: "Your Posts",
-    icon: BsFilePost,
-    href: "#",
-  },
-  {
-    label: "Your Uploads",
-    icon: AiOutlineFileDone,
-    href: "/uploads",
-  },
-  {
-    label: "Logout",
-    icon: MdOutlineLogout,
-    onClick: signOut,
-  },
-];
-const Login = ({ children = null }) => {
-  // console.log(session)
-  const router = useRouter();
 
-  const { data: session, status } = useSession();
+const menuItems = [
+  { label: "Upload Paper", icon: FiUpload, href: "/upload" },
+  { label: "Educational Boards", icon: FiGlobe, href: "/Boards" },
+  { label: "Your Uploads", icon: AiOutlineFileDone, href: "/uploads" },
+  { label: "Saved Papers", icon: FiBookmark, href: "/Bookmarks" },
+  { label: "Logout", icon: FiLogOut, onClick: signOut, danger: true },
+];
+
+const Login = () => {
+  const { data: session } = useSession();
   const user = session?.user;
-  const isLoadingUser = status === "loading";
 
   const [showModal, setShowModal] = useState(false);
   const openModal = () => setShowModal(true);
   const closeModal = () => setShowModal(false);
+
   return (
     <>
-      <div>
-
+      <div className="relative z-[70]">
         {user ? (
-          <Menu as="div" className="relative z-50">
-            <Menu.Button className="flex items-center justify-center space-x-px group">
-              <div className="shrink-0 flex items-center justify-center rounded-full overflow-hidden relative bg-gray-200 w-9 h-9">
+          <Menu as="div" className="relative">
+            <Menu.Button className="flex items-center gap-2 p-1.5 pr-3 rounded-2xl hover:bg-gray-100 transition-all group border border-transparent hover:border-gray-200">
+              <div className="shrink-0 w-9 h-9 rounded-xl overflow-hidden relative border-2 border-white shadow-sm transition-transform group-hover:scale-105">
                 {user?.image ? (
-                  <Image
-                    src={user?.image}
-                    alt={user?.name || "Avatar"}
-                    layout="fill"
-                  />
+                  <Image src={user.image} alt={user.name || "User"} layout="fill" />
                 ) : (
-                  <AiOutlineUser className="text-gray-400 w-6 h-6" />
+                  <div className="w-full h-full bg-qp-orange/10 flex items-center justify-center text-qp-orange">
+                    <FiUser className="w-5 h-5" />
+                  </div>
                 )}
               </div>
-              <ChevronDownIcon className="w-5 h-5 shrink-0 text-gray-500 group-hover:text-current" />
+              <div className="hidden sm:block text-left">
+                  <p className="text-xs font-black text-gray-900 leading-tight truncate max-w-[80px]">{user.name?.split(' ')[0]}</p>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">Student</p>
+              </div>
+              <ChevronDownIcon className="w-4 h-4 text-gray-400 group-hover:text-qp-orange transition-colors" />
             </Menu.Button>
+
             <Transition
               as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+              enter="transition ease-out duration-200"
+              enterFrom="opacity-0 translate-y-2 scale-95"
+              enterTo="opacity-100 translate-y-0 scale-100"
+              leave="transition ease-in duration-150"
+              leaveFrom="opacity-100 translate-y-0 scale-100"
+              leaveTo="opacity-0 translate-y-2 scale-95"
             >
-              <Menu.Items className="absolute right-0 w-72 overflow-hidden mt-1 divide-y divide-gray-100 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="flex items-center space-x-2 py-4 px-4 mb-2">
-                  <div className="shrink-0 flex items-center justify-center rounded-full overflow-hidden relative bg-gray-200 w-9 h-9">
+              <Menu.Items className="absolute right-0 w-64 mt-3 origin-top-right bg-white rounded-[2rem] shadow-2xl ring-1 ring-black/5 focus:outline-none overflow-hidden p-2">
+                <div className="flex items-center gap-3 p-4 border-b border-gray-50 mb-2">
+                  <div className="shrink-0 w-10 h-10 rounded-xl overflow-hidden relative border-2 border-gray-50">
                     {user?.image ? (
-                      <Image
-                        src={user?.image}
-                        alt={user?.name || "Avatar"}
-                        layout="fill"
-                      />
+                      <Image src={user.image} alt={user.name || "User"} layout="fill" />
                     ) : (
-                      <AiOutlineUser className="text-gray-400 w-6 h-6" />
+                      <div className="w-full h-full bg-qp-orange/10 flex items-center justify-center text-qp-orange">
+                        <FiUser className="w-6 h-6" />
+                      </div>
                     )}
                   </div>
                   <div className="flex flex-col truncate">
-                    <span>{user?.name}</span>
-                    <span className="text-sm text-gray-500">{user?.email}</span>
+                    <span className="text-sm font-black text-gray-900 truncate tracking-tight">{user?.name}</span>
+                    <span className="text-[10px] text-gray-400 font-medium truncate">{user?.email}</span>
                   </div>
                 </div>
 
-                <div className="py-2">
-                  {menuItems.map(({ label, href, onClick, icon: Icon }) => (
-                    <div
-                      key={label}
-                      className="px-2 last:border-t last:pt-2 last:mt-2"
-                    >
-                      <Menu.Item>
-                        {href ? (
-                          <Link href={href} className="flex items-center space-x-2 py-2 px-4 rounded-md hover:bg-qp-orange">
-                            
-                              <Icon className="w-5 h-5 shrink-0 text-black" />
-                              <span>{label}</span>
+                <div className="space-y-1">
+                  {menuItems.map(({ label, href, onClick, icon: Icon, danger }) => (
+                    <Menu.Item key={label}>
+                      {({ active }) => (
+                        href ? (
+                          <Link href={href}>
+                            <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all cursor-pointer ${
+                              active ? 'bg-qp-orange/10 text-qp-orange' : 'text-gray-600'
+                            }`}>
+                              <Icon className="w-5 h-5" />
+                              <span className="text-sm font-bold tracking-tight">{label}</span>
+                            </div>
                           </Link>
                         ) : (
                           <button
-                            className="w-full flex items-center space-x-2 py-2 px-4 rounded-md hover:bg-qp-orange"
                             onClick={onClick}
+                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                              active 
+                                ? danger ? 'bg-red-50 text-red-600' : 'bg-qp-orange/10 text-qp-orange' 
+                                : danger ? 'text-red-400' : 'text-gray-600'
+                            }`}
                           >
-                            <Icon className="w-5 h-5 shrink-0 text-black" />
-                            <span>{label}</span>
+                            <Icon className="w-5 h-5" />
+                            <span className="text-sm font-bold tracking-tight">{label}</span>
                           </button>
-                        )}
-                      </Menu.Item>
-                    </div>
+                        )
+                      )}
+                    </Menu.Item>
                   ))}
                 </div>
               </Menu.Items>
             </Transition>
           </Menu>
         ) : (
-          <div
+          <button
             onClick={openModal}
-            className="bg-qp-orange flex h-10 w-28 items-center justify-evenly rounded-xl drop-shadow-neo cursor-pointer "
+            className="btn-primary py-2.5 px-6 h-10 shadow-lg shadow-qp-orange/20"
           >
-            <AiOutlineUserAdd className="w-5 h-5 shrink-0 text-black" />
-            <h3>Signin</h3>
-          </div>
+            <AiOutlineUserAdd className="text-xl" />
+            <span className="font-bold text-sm tracking-tight">Sign In</span>
+          </button>
         )}
-        <main className="">
-          <div className="">
-            {typeof children === 'function' ? children(openModal) : children}
-          </div>
-        </main>
-
-        <AuthModal show={showModal} onClose={closeModal} />
       </div>
+
+      <AuthModal show={showModal} onClose={closeModal} />
     </>
   );
-  // if (session) {
-  //   return (
-  //     <>
-  //       <div className="flex ">
-
-  //         <div
-  //           onClick={() => signOut()}
-  //           className="bg-qp-orange flex h-10 w-10 rounded- items-center justify-evenly rounded-full drop-shadow-neo cursor-pointer "
-  //         >
-  //           <img
-  //             className="h-10 w-10 rounded-full"
-  //             src={session.user.image}
-  //             alt="user"
-  //           />
-
-  //           {/* <h3>logout</h3>
-  //         <p>{session.user.name}</p> */}
-  //         </div>
-  //         <ChevronDownIcon className="w-5 h-5 shrink-0 text-gray-500 group-hover:text-current" />
-  //       </div>
-
-  //     </>
-  //   );
-  // } else {
-  //   return (
-  //     <>
-  // <div
-  //   onClick={() => signIn()}
-  //   className="bg-qp-orange flex h-10 w-28 items-center justify-evenly rounded-xl drop-shadow-neo cursor-pointer "
-  // >
-  //   <img src="/login.svg" alt="login icon" />
-  //   <h3>Signin</h3>
-  // </div>
-  //     </>
-  //   );
-  // }
 };
+
 export default Login;

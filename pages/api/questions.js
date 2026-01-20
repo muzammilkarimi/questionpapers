@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
 import { prisma } from "../../lib/prisma";
+import { nanoid } from "nanoid";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -26,33 +27,51 @@ export default async function handler(req, res) {
     const { pdf_url, boardId, year, typeId, subject, class_name, author } =
       req.body;
 
+    const isNote = typeId === "type_notes";
+
     // ✅ Validate input
-    if (!pdf_url || !boardId || !year || !typeId || !subject || !class_name) {
+    if (!pdf_url || !typeId || !subject || !class_name) {
       return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    if (!isNote && (!boardId || !year)) {
+      return res.status(400).json({ message: "Board and Year are required for this type" });
     }
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
     });
 
-    const title = `${subject} ${year} ${class_name}`;
-    const slug = slugify(title);
+    const titleParts = [subject];
+    if (year) titleParts.push(year);
+    titleParts.push(class_name);
+    
+    const title = titleParts.join(" ");
+    const slug = `${slugify(title)}-${nanoid(6)}`;
     const difficulty = req.body.difficulty || "medium";
 
+    const questionData = {
+      title,
+      slug,
+      difficulty,
+      pdf_url,
+      type: { connect: { id: typeId } },
+      subject,
+      class_name,
+      author,
+      owner: { connect: { id: user.id } },
+    };
+
+    if (boardId) {
+      questionData.board = { connect: { id: boardId } };
+    }
+
+    if (year) {
+      questionData.year = parseInt(year);
+    }
+
     const question = await prisma.question.create({
-      data: {
-        title,
-        slug,
-        difficulty,
-        pdf_url,
-        boardId,
-        year,
-        typeId,
-        subject,
-        class_name,
-        author,
-        ownerId: user.id,
-      },
+      data: questionData,
     });
 
     return res.status(200).json(question);

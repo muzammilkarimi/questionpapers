@@ -1,36 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --qp-orange: #FF914D;
+  --qp-orange-light: #ffac75;
+  --qp-orange-dark: #e67e3c;
+  --back-grey: #F8F9FA;
+  --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--back-grey);
+  color: #1a1a1a;
+  overflow-x: hidden;
+}
+
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 6px;
 }
 
-/* Track */
-/* ::-webkit-scrollbar-track {
-  background: #e2e1df;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #ff914d;
-  border-radius: 20px;
+  background: var(--qp-orange);
+  border-radius: 10px;
 }
 
-/* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #a15d32;
+  background: var(--qp-orange-dark);
 }
 
-::-moz-selection {
-  /* Code for Firefox */
-  /* color: red; */
-  background: #ff914d;
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
 }
 
-::selection {
-  /* color: red; */
-  background: #e47f41;
+.neo-blur {
+  background: rgba(255, 145, 77, 0.05);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 145, 77, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Button styles */
+.btn-primary {
+  @apply bg-qp-orange text-white font-semibold py-2 px-6 rounded-xl transition-all duration-300 hover:bg-qp-orange-dark hover:shadow-lg active:scale-95 flex items-center justify-center gap-2;
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-800 font-semibold py-2 px-6 rounded-xl border border-gray-200 transition-all duration-300 hover:bg-gray-50 hover:shadow-md active:scale-95 flex items-center justify-center gap-2;
+}
+
+/* Input styles */
+.input-field {
+  @apply w-full bg-white border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-qp-orange focus:border-transparent transition-all;
+}
+
+/* Mobile Bottom Nav */
+.mobile-nav {
+  @apply lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md h-16 glass rounded-2xl flex items-center justify-around px-6 z-[100] shadow-2xl;
+}
+
+.mobile-nav-item {
+  @apply flex flex-col items-center justify-center text-gray-400 gap-1;
+}
+
+.mobile-nav-item.active {
+  @apply text-qp-orange;
 }
 
 .hamburger {
@@ -48,7 +103,7 @@
   top: 0;
   left: 0;
   width: 24px;
-  height: 1.5px;
+  height: 2px;
   border-radius: 20px;
   background: #000;
   transform: rotate(0);
@@ -63,19 +118,11 @@
   transform: translateY(14px);
 }
 
-.open {
-  transform: rotate(90deg);
-  transform: translateY(0px);
+#nprogress .bar {
+  background: var(--qp-orange) !important;
+  height: 3px !important;
 }
 
-.open .hamburger-top {
-  transform: rotate(45deg) translateY(6px) translate(6px);
-}
-
-.open .hamburger-mid {
-  display: none;
-}
-
-.open .hamburger-bot {
-  transform: rotate(-45deg) translateY(6px) translate(-6px);
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--qp-orange), 0 0 5px var(--qp-orange) !important;
 }

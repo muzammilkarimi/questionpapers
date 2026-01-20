@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,7 +5,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -17,17 +13,16 @@ model Account {
   type               String
   provider           String
   providerAccountId  String
-  refresh_token      String? @db.Text
-  access_token       String? @db.Text
+  refresh_token      String?
+  access_token       String?
   expires_at         Int?
   token_type         String?
   scope              String?
-  id_token           String? @db.Text
+  id_token           String?
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -47,8 +42,20 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
-  sessions      Session[]
+  bookmarks     Bookmark[]
   Question      Question[]
+  sessions      Session[]
+}
+
+model Bookmark {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  createdAt  DateTime @default(now())
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId])
 }
 
 model VerificationToken {
@@ -67,32 +74,35 @@ model Boards {
 }
 
 model Q_type {
-  id   String @id @default(cuid())
-  name String
-
+  id       String     @id @default(cuid())
+  name     String
   Question Question[]
 }
 
 model Question {
-  id String @id @default(cuid())
-
-  title      String
-  slug       String @unique
-  difficulty String // "easy" | "medium" | "hard"
-
-  pdf_url    String
-  boardId    String
-  year       Int
-  typeId     String
-  subject    String
-  class_name String
-  author     String
-  ownerId    String
-
-  board Boards @relation(fields: [boardId], references: [id])
-  type  Q_type @relation(fields: [typeId], references: [id])
-  owner User   @relation(fields: [ownerId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String     @id @default(cuid())
+  pdf_url      String
+  boardId      String?
+  year         Int?
+  typeId       String
+  subject      String
+  author       String
+  ownerId      String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  class_name   String
+  difficulty   String
+  slug         String     @unique
+  title        String
+  bookmarkedBy Bookmark[]
+  board        Boards?    @relation(fields: [boardId], references: [id])
+  owner        User       @relation(fields: [ownerId], references: [id])
+  type         Q_type     @relation(fields: [typeId], references: [id])
 }
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+

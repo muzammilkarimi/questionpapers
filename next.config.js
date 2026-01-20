@@ -15,6 +15,18 @@ module.exports = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "*.supabase.co",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "*.supabase.in",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
